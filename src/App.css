@@ -1,0 +1,20 @@
+.conatiner{
+  display: flex;
+}
+.right-box{
+  width:100%;
+}
+.sidebar{
+  min-height: 100vh;
+}
+.hashtag{
+  margin:0 3px;
+}
+.post{
+  margin:1.5rem 5px;
+  padding:1rem;
+  min-width: 600px;
+}
+.deletebtn{
+  cursor: pointer;
+}

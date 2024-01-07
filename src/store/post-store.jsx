@@ -4,6 +4,7 @@ import { useReducer } from "react";
 export const PostListContext = createContext({
   postList:[],
   addPost : ()=>{},
+  addInitialPosts: ()=>{},
   deletePost: ()=>{}
 });
 
@@ -12,6 +13,8 @@ const postListReducer= (currState,action)=>{
   let newPost= currState;
   if(action.type === 'DELETE_ITEM'){
     newPost = currState.filter(item=> item.id !== action.payload.postId);
+  }else if(action.type === 'ADD_INITIAL_POSTS'){
+    newPost = action.payload.posts;
   }else if(action.type === 'ADD_POST'){
     newPost = [action.payload,...currState];
   }
@@ -19,7 +22,7 @@ const postListReducer= (currState,action)=>{
 }
 
 const PostListContextProvider =({children})=>{
-  const [postList,dispatchPostList] =  useReducer(postListReducer,DEFAULT_POST_LIST);
+  const [postList,dispatchPostList] =  useReducer(postListReducer,[]);
   const addPost =(UserID,title,content,reaction,tags)=>{
      dispatchPostList({
        type:"ADD_POST",
@@ -33,6 +36,15 @@ const PostListContextProvider =({children})=>{
       }
      })
   }
+
+  const addInitialPosts =(posts)=>{
+    dispatchPostList({
+      type:"ADD_INITIAL_POSTS",
+      payload:{
+      posts,
+     }
+    })
+ }
   const deletePost =(postId)=>{
      dispatchPostList({
       type:"DELETE_ITEM",
@@ -43,27 +55,10 @@ const PostListContextProvider =({children})=>{
   return (
     <PostListContext.Provider value={{postList,
     addPost : addPost,
+    addInitialPosts: addInitialPosts,
     deletePost: deletePost}}>{children}
     </PostListContext.Provider>
     );
 };
 
-const DEFAULT_POST_LIST =[{
-  id:'1',
-  title:'Wushang Clan',
-  body: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.',
-  reactions:2,
-  userId:'pp@6',
-  tags: ['Abuse','Wushang'],
-},
-{
-  id:'2',
-  title:'Valo Clan',
-  body: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. OO jnsnk akjsbwdj sdnkjnw',
-  reactions:23,
-  userId:'pp@86',
-  tags: ['Game','TitForTat','RegalTosX'],
-
-}
-];
 export default PostListContextProvider;
